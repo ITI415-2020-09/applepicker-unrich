@@ -1,7 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Security.Cryptography;
-using System.Threading;
 using UnityEngine;
 
 public class AppleTree : MonoBehaviour
@@ -20,12 +18,20 @@ public class AppleTree : MonoBehaviour
     public float chanceToChangeDirections = 0.1f;
 
     //Rate at which Apples will be instantiated
-    public float secondBetweenAppleDrops = 1f;
+    public float secondsBetweenAppleDrops = 1f;
 
     // Start is called before the first frame update
     void Start()
     {
-        //Droppping apples every second    
+        //Droppping apples every second
+        Invoke("DropApple", 2f);
+    }
+    
+    void DropApple()
+    {
+        GameObject apple = Instantiate<GameObject>(applePrefab);
+        apple.transform.position = transform.position;
+        Invoke("DropApple", secondsBetweenAppleDrops);
     }
 
     // Update is called once per frame
@@ -33,19 +39,23 @@ public class AppleTree : MonoBehaviour
     {
         //Basic Movement
         Vector3 pos = transform.position;
-        pos.x += speed * Timeout.deltaTime;
+        pos.x += speed * Time.deltaTime;
         transform.position = pos;
 
         //Changing Direction
         if (pos.x < -leftAndRightEdge)
         {
             speed = Mathf.Abs(speed); //move right
-        }else if (pos.x > leftAndRightEdge)
+        } else if (pos.x > leftAndRightEdge)
         {
             speed = -Mathf.Abs(speed); //move left
-        }else if (Random.value < chanceToChangeDirections)
+        }
+    }
+    void FixedUpdate()
+    {
+        if (Random.value < chanceToChangeDirections)
         {
             speed *= -1; //change direction
         }
-    }
+    }    
 }
