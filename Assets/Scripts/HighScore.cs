@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class HighScore : MonoBehaviour
 {
+    static public int score = 1000;
+
     void Awake()
     {
         if (PlayerPrefs.HasKey("HighScore"))
